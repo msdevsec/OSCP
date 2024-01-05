@@ -1,0 +1,4 @@
+wfuzz -c -u http://10.10.10.43/ -H "Host: FUZZ.nineveh.htb" -w /usr/share/seclists/Discovery/DNS/bitquark-subdomains-top100000.txt --hh 178
+
+wfuzz -c --hc=404 --hw=545 -t 200 -w /usr/share//wordlists/SecLists/Discovery/Web-Content/directory-list-2.3-medium.txt -H "Host: FUZZ.topology.htb" http://topology.htb
+

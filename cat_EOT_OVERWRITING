@@ -1,0 +1,17 @@
+cat <<'EOT'> /etc/systemd/system/pythonapp.service
+[Unit]
+Description=Python App
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/home/cmeeks/reverse.sh
+TimeoutSec=30
+RestartSec=15s
+User=root
+ExecReload=/bin/kill -USR1 $MAINPID
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+EOT

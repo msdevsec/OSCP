@@ -1,0 +1,10 @@
+after gobuster found 192.168.168.205/config code 300 (forbidden)
+
+ffuf -u http://192.168.168.205/config/FUZZ -w /usr/share/seclists/Discovery/Web-Content/quickhits.txt -fw 20
+
+/config.yml
+can access 192.168.165.205/config/config.yml
+
+http://192.168.165.205/plugins/PicoTest.php
+
+$_SERVER['SCRIPT_FILENAME']	/var/www/html/planetexpress/plugins/PicoTest.php

@@ -1,0 +1,10 @@
+for i in {1..255}; do (ping -c 1 10.200.73.${i} | grep "bytes from" &); done
+
+#port scanning bash
+for i in {1..65535}; do (echo > /dev/tcp/10.200.73.200/$i) >/dev/null 2>&1 && echo $i is open; done
+
+#transfer nmap binary to target and scan fro mtarget:
+./nmap-VILE -sn 10.200.73.1-255 -oN scan-VILE
+
+#scan the services
+./nmap-VILE 10.200.73.100, 10.200.73.150 -oN scan-secondary

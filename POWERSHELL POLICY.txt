@@ -1,0 +1,1 @@
+https://lazyadmin.nl/powershell/running-scripts-is-disabled-on-this-system/#:~:text=Execution%20Policy%20Scopes-,Set%20Execution%20Policy%20for%20Current%20user,for%20the%20logged%2Din%20user

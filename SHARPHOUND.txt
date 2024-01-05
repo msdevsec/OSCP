@@ -1,0 +1,37 @@
+powershell:
+
+Import-Module .\Sharphound.ps1
+Get-Help Invoke-BloodHound
+Invoke-BloodHound -CollectionMethod All -OutputDirectory C:\Users\stephanie\Desktop\ -OutputPrefix "corp audit"
+
+cmd:
+
+-OutputPrefix "corp audit"
+
+
+ls C:\Users\stephanie\Desktop\
+
+Which syntax in SharpHound allows us to set a password on the resulting .zip file?
+zip password
+
+copy zip file to Kali
+sudo neo4j start
+
+neo4j
+London212
+Bloodhound
+
+
+
+
+
+
+
+
+
+
+LegmanTeamBenzoin!!
+
+
+
+

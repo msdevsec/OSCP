@@ -1,0 +1,10 @@
+zip2john /home/kali/winrm_backup.zip > hash
+
+john --wordlist=/usr/share/wordlists/rockyou.txt hash
+
+locate pfx2john.py
+
+pfx2john.py legacyy_dev_auth.pfx | tee legacyy_dev_auth.pfx.hash > pfxhash
+
+
+john --wordlist=/usr/share/wordlists/rockyou.txt pfxhash

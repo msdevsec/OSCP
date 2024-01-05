@@ -1,0 +1,116 @@
+###bulk scan
+
+nmap --top-ports 10 --open --dns-server 10.11.1.??? -oA nmap/top10_all_hosts  10.11.1.0/24
+
+###single traget
+
+nmap -v -sV -p80,443 --script vuln -oA http_vuln 10.11.1.35
+
+dirb http://10.11.1.35 -r -z 10
+
+ping 10.11.1.35
+
+sudo nmap -p 1-65535 -sC -sV -A -T4 10.11.1.136
+
+nmap -Pn -n -sV --script vuln 10.11.1.35
+
+dig -x 10.11.1.35
+
+dirb http://10.11.1.234:10443 /usr/share/wordlists/dirb/big.txt -z 5 -v | grep -v "CODE:404"
+
+dirb http://10.11.1.35
+
+autorecon 10.11.1.35
+
+nmap -T4 -p- -sY -sV -sC -n -oA SCTAllScan 10.11.1.35
+
+dirsearch -u http://10.11.1.35
+
+gobuster dir -u http://10.11.1.35 -w /usr/share/dirbuster/wordlists/directory-list-2.3-medium.txt
+
+sudo proxychains nmap --top-ports=20 -sT -Pn 10.11.1.35
+
+enum4linux 10.11.1.35
+
+Nmap -p 22 --script ssh2-enum-algos
+
+nikto -h 10.11.1.73
+
+dirbuster 10.11.1.237
+
+./nmapAutomator.sh -H 10.11.1.73 -t All
+
+ nmap -A -sV -sC -sU 10.11.1.115 --script=*enum --top-ports 20
+
+sudo nmap -vv -O -sTUV –top-ports 20 10.11.1.128
+
+cme smb 10.11.1.128
+
+
+####NMAP vulns & SCRIPTS
+
+nmap -sC -sV -script vuln 10.11.1.31
+
+
+cd /usr/share/nmap/scripts; ls |  grep smb
+
+nmap -A -sV -sC -sU 10.11.1.111 --script=*enum --top-ports 20
+
+###SMBMAP
+https://github.com/ShawnDEvans/smbmap
+
+mbmap -H 10.11.1.31 -u guest -r 'wwwroot'
+
+
+smbmap -H 10.11.1.31 -u guest --download 'wwwroot/base-login.txt'
+[+] Starting download: wwwroot\base-login.txt (1292 bytes)
+[+] File output to: /home/kali/Desktop/10.11.1.31-wwwroot_base-login.txt
+
+
+
+nmap 10.11.1.
+
+
+smbmap -H 10.11.1.115 -P 139
+
+smbclient -N -L \\\\10.11.1.115
+
+
+
+
+############nmap scans UDP & TCP
+
+https://danielmiessler.com/blog/nmap-use-the-top-ports-option-for-both-tcp-and-udp-simultaneously/
+
+nmap -vv -O -P0 -sTUV –top-ports 1000 -oA target $target
+
+Which does all of the following:
+
+very verbose
+get the operating system
+tcp, udp, and version information
+top 1,000 TCP and UDP ports
+output in nmap, greppable, and XML format
+
+
+####BEST UDP SCANS######
+
+
+sudo nmap -vv -O -sTUV –top-ports 20 10.11.1.111 
+
+nmap -A -sV -sC -sU 10.11.1.111 --script=*enum --top-ports 20
+
+
+
+
+smbclient -N -L \\\\10.11.1.115
+
+
+
+###smb scans for windows
+
+cd /usr/share/nmap/scripts
+target=10.11.1.227
+p=445
+scriptargs='smbpass=','smbdomain=mydomain.com','unsafe=1'
+for script in $(ls smb* | grep -v -e brute -e flood); do echo "=== $script ==="; sudo nmap $(echo $target) -script=$script -script-args="${scriptargs}" -p $p| grep "|" ; done

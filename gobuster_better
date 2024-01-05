@@ -1,0 +1,1 @@
+gobuster dir -u http://192.168.85.52:8080 -w /usr/share/dirb/wordlists/common.txt -k -x .txt,.php --threads 50

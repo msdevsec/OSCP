@@ -1,0 +1,1 @@
+/Desktop/kerbrute_linux_amd64 passwordspray -d search.htb newnewusers.txt @3ONEmillionbaby --dc 10.10.11.129

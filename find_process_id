@@ -1,0 +1,2 @@
+ps u -C passwd
+grep Uid /proc/1932/status

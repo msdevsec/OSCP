@@ -1,0 +1,1 @@
+wpscan --url http://10.10.11.125 --enumerate p,u --plugins-detection aggressive

